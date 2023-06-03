@@ -1,4 +1,5 @@
 def process_packs_data(pack1_data, pack2_data, customer_id):
+    # For processing of data received from endpoints
     pack1 = None
     pack2 = None
 
@@ -16,6 +17,7 @@ def process_packs_data(pack1_data, pack2_data, customer_id):
 
 
 def format_pack_data(pack_data):
+    # to parse and format packs data
     info = []
     for data in pack_data:
         info.append(f'{data["ingredient"]} {data["quantity"]}{data["unit"]}')
