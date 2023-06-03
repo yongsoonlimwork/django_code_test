@@ -3,6 +3,8 @@ import logging
 
 import requests
 from django.http import JsonResponse
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
 
@@ -19,6 +21,35 @@ class CustomerRequestModelViewSet(ModelViewSet):
     queryset = CustomerRequest.objects.all()
     http_method_names = ['post']
 
+    @swagger_auto_schema(
+        operation_description='Get customer medication info',
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['customer_id'],
+            properties={
+                'customer_id': openapi.Schema(type=openapi.TYPE_NUMBER)
+            }
+        ),
+        responses={
+            200: openapi.Response('Success', openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                required=['id', 'customer_id'],
+                properties={
+                    'id': openapi.Schema(type=openapi.TYPE_NUMBER),
+                    'customer_id': openapi.Schema(type=openapi.TYPE_NUMBER),
+                    'pack1': openapi.Schema(type=openapi.TYPE_ARRAY, items=openapi.Schema(type=openapi.TYPE_STRING)),
+                    'pack2': openapi.Schema(type=openapi.TYPE_ARRAY, items=openapi.Schema(type=openapi.TYPE_STRING)),
+                }
+            )),
+            400: openapi.Response('Bad Request', openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                required=['message'],
+                properties={
+                    'message': openapi.Schema(description='Error Message', type=openapi.TYPE_STRING),
+                }
+            )),
+        }
+    )
     def create(self, request, *args, **kwargs):
         if 'customer_id' not in request.data:
             logger.error('Missing customer id')

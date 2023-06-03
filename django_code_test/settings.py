@@ -9,12 +9,15 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 LOGS_DIR = Path.joinpath(BASE_DIR, 'logs')
+
+if not Path.exists(LOGS_DIR):
+    os.mkdir(LOGS_DIR)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -43,6 +46,10 @@ LOGGING = {
             "propagate": True,
         },
     },
+}
+
+SWAGGER_SETTINGS = {
+    "DISPLAY_OPERATION_ID": False
 }
 
 # SECURITY WARNING: don't run with debug turned on in production!
